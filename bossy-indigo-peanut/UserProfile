@@ -1,0 +1,33 @@
+import React from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+
+const UserProfile = ({ userProfile, updateUserProfile, updateContactPosition }) => {
+  const handleUpdateProfile = () => {
+    updateUserProfile({ name: userProfile.name, position: userProfile.position });
+    // Update the position in the contacts list
+    updateContactPosition(userProfile.id, userProfile.position);
+  };
+
+  return (
+    <View>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>
+        Your Profile
+      </Text>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Name"
+        value={userProfile.name}
+        onChangeText={(text) => updateUserProfile({ ...userProfile, name: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Position"
+        value={userProfile.position}
+        onChangeText={(text) => updateUserProfile({ ...userProfile, position: text })}
+      />
+      <Button title="Update Profile" onPress={handleUpdateProfile} />
+    </View>
+  );
+};
+
+export default UserProfile;

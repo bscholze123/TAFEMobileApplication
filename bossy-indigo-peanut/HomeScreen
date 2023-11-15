@@ -1,0 +1,116 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Modal, Button } from 'react-native';
+import UserProfile from './UserProfile';
+
+const HomeScreen = ({ navigation, route }) => {
+  const [contacts, setContacts] = useState([
+    { id: '1', name: 'John Doe', position: 'Developer', phone: '1234567890', email: 'john@example.com' },
+    { id: '2', name: 'Jane Smith', position: 'Designer', phone: '9876543210', email: 'jane@example.com' },
+    // Add more staff contacts as needed
+  ]);
+
+  const [userProfile, setUserProfile] = useState({
+    id: '1',
+    name: 'John Doe',
+    position: 'Developer',
+    phone: '1234567890',
+    email: 'john@example.com',
+  });
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const updateUserProfile = (newProfile) => {
+    setUserProfile({ ...userProfile, ...newProfile });
+  };
+
+  const updateContactPosition = (contactId, newPosition) => {
+    setContacts((prevContacts) =>
+      prevContacts.map((contact) =>
+        contact.id === contactId ? { ...contact, position: newPosition } : contact
+      )
+    );
+  };
+
+  const updateContact = (contactId) => {
+    const selectedContact = contacts.find((contact) => contact.id === contactId);
+    setUserProfile(selectedContact);
+    setModalVisible(true);
+  };
+
+  const saveContact = (newContact) => {
+    // Generate a unique ID for the new contact
+    newContact.id = String(new Date().getTime());
+    setContacts((prevContacts) => [...prevContacts, newContact]);
+    setModalVisible(false);
+  };
+
+  // Effect to handle updates from AddContactScreen
+  useEffect(() => {
+    if (route.params?.newContact) {
+      saveContact(route.params.newContact);
+    }
+  }, [route.params?.newContact]);
+
+  const renderContactItem = ({ item }) => (
+    <TouchableOpacity onPress={() => updateContact(item.id)}>
+      <View style={{ marginVertical: 10 }}>
+        <Text>{`${item.name} - ${item.position}`}</Text>
+        <Text>{`Phone: ${item.phone}, Email: ${item.email}`}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>
+        Staff Contact Application
+      </Text>
+
+      {/* User Profile Section */}
+      <UserProfile
+        userProfile={userProfile}
+        updateUserProfile={updateUserProfile}
+        updateContactPosition={updateContactPosition}
+      />
+
+      {/* Staff Contacts Section */}
+      <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 20, marginBottom: 10 }}>
+        Staff Contacts
+      </Text>
+      <FlatList data={contacts} renderItem={renderContactItem} keyExtractor={(item) => item.id} />
+
+      {/* Modal for Updating Contacts */}
+      <Modal animationType="slide" transparent={false} visible={modalVisible}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>
+            Update Contact
+          </Text>
+          <UserProfile
+            userProfile={userProfile}
+            updateUserProfile={updateUserProfile}
+            updateContactPosition={updateContactPosition}
+          />
+          <Button title="Save Changes" onPress={() => saveContact(userProfile)} />
+          <Button title="Cancel" onPress={() => setModalVisible(false)} />
+        </View>
+      </Modal>
+
+      {/* Plus Button for Adding New Staff */}
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          backgroundColor: 'blue',
+          padding: 10,
+          borderRadius: 30,
+        }}
+        onPress={() => navigation.navigate('AddContact')}
+      >
+        <Text style={{ color: 'white', fontSize: 20 }}>+</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default HomeScreen;

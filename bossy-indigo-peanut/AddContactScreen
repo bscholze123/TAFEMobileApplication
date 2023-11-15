@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+
+const AddContactScreen = ({ navigation }) => {
+  const [newContact, setNewContact] = useState({
+    name: '',
+    position: '',
+    phone: '',
+    email: '',
+  });
+
+  const saveContact = () => {
+    // Validate that required fields are not empty
+    if (!newContact.name || !newContact.position || !newContact.phone || !newContact.email) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    // Generate a unique ID for the new contact
+    newContact.id = String(new Date().getTime());
+
+    // Update the list of contacts in the HomeScreen
+    navigation.navigate('Home', { newContact });
+  };
+
+  return (
+    <View>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>
+        Add Contact
+      </Text>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Name"
+        value={newContact.name}
+        onChangeText={(text) => setNewContact({ ...newContact, name: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Position"
+        value={newContact.position}
+        onChangeText={(text) => setNewContact({ ...newContact, position: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Phone"
+        value={newContact.phone}
+        onChangeText={(text) => setNewContact({ ...newContact, phone: text })}
+      />
+      {/* Add TextInput for email */}
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Email"
+        value={newContact.email}
+        onChangeText={(text) => setNewContact({ ...newContact, email: text })}
+      />
+      <Button title="Save Contact" onPress={saveContact} />
+    </View>
+  );
+};
+
+export default AddContactScreen;
