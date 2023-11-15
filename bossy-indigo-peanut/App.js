@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
-import AddContactScreen from './AddContactScreen';
+import UpdateProfileScreen from './UpdateProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,7 +11,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="AddContact" component={AddContactScreen} />
+        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

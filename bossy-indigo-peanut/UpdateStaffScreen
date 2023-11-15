@@ -1,0 +1,56 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+
+const UpdateStaffScreen = ({ route, navigation }) => {
+  const [updatedContact, setUpdatedContact] = useState(route.params.contact);
+
+  useEffect(() => {
+    // Update the screen title with the contact name
+    navigation.setOptions({ title: `Update ${updatedContact.name}'s Details` });
+  }, [updatedContact]);
+
+  const handleUpdateContact = () => {
+    // Perform any validation if needed
+
+    // Update the contact details in the parent screen
+    route.params.updateContactDetails(updatedContact);
+
+    // Navigate back to the HomeScreen
+    navigation.goBack();
+  };
+
+  return (
+    <View>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>
+        Update Contact Details
+      </Text>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Name"
+        value={updatedContact.name}
+        onChangeText={(text) => setUpdatedContact({ ...updatedContact, name: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Position"
+        value={updatedContact.position}
+        onChangeText={(text) => setUpdatedContact({ ...updatedContact, position: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Phone"
+        value={updatedContact.phone}
+        onChangeText={(text) => setUpdatedContact({ ...updatedContact, phone: text })}
+      />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
+        placeholder="Email"
+        value={updatedContact.email}
+        onChangeText={(text) => setUpdatedContact({ ...updatedContact, email: text })}
+      />
+      <Button title="Update Contact" onPress={handleUpdateContact} />
+    </View>
+  );
+};
+
+export default UpdateStaffScreen;
